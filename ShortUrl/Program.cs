@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 Log.Logger = new LoggerConfiguration()
@@ -21,14 +22,21 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+})
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultUI()
+    .AddDefaultTokenProviders();
+
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IUrlRepository, UrlRepository>();
 
 var app = builder.Build();
 
-//Seed Data
+//Seed Data  COMMENT THIS BLOCK AFTER FIRST USE
 using (var scope = app.Services.CreateScope())
 {
     await DbSeeder.SeedDefaultData(scope.ServiceProvider);
@@ -50,6 +58,7 @@ else
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseRouting();
 
@@ -60,7 +69,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=Url}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 app.MapRazorPages()

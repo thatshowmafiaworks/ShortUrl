@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Url>
+@{
+    ViewData["Title"] = "Index";
+}
+@if (User.Identity.IsAuthenticated)
+{
+    <a asp-action="Add" asp-controller="Url" class="btn btn-primary">Add new</a>
+}
+<h1>All Shortened Urls</h1>
+<ul>
+    if(
+    @foreach(var url in Model)
+    {
+        <li>
+            @url.UrlOriginal - @url.UrlNormalized - @url.UrlShort - @url.Created
+        </li>
+    }
+</ul>

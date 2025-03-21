@@ -1,0 +1,18 @@
+﻿@using ShortUrl.Models.DTOs
+@model UrlDTO
+
+<div style="width:50%">
+    <a asp-action="Index" asp-controller="Url" class="btn btn-primary">Back</a>
+    <h2>Add ShortUrl</h2>
+    <form asp-action="Add">
+        <div class="my-2">
+            <label>Url</label>
+            <input type="text" class="form-control" asp-for="UrlOriginal" />
+            <span asp-validation-for="UrlOriginal" class="text-danger"></span>
+        </div>
+
+        <div class="my-2">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </form>
+</div>

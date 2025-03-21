@@ -27,7 +27,10 @@ namespace ShortUrl.Repositories
         {
             return await context.Urls.FindAsync(id);
         }
-
+        public async Task<Url?> GetByHash(string hash)
+        {
+            return await context.Urls.FirstOrDefaultAsync(x => x.Hash.Equals(hash));
+        }
         public async Task Update(Url url)
         {
             context.Urls.Update(url);

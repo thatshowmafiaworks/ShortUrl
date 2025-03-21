@@ -8,6 +8,7 @@ namespace ShortUrl.Repositories
         Task Update(Url url);
         Task Delete(Url url);
         Task<Url> GetById(string id);
+        Task<Url> GetByHash(string hash);
         Task<IEnumerable<Url>> GetAll();
 
     }
