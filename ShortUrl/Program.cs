@@ -33,6 +33,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IUrlRepository, UrlRepository>();
+builder.Services.AddTransient<IAboutTextRepository, AboutTextRepository>();
 
 var app = builder.Build();
 

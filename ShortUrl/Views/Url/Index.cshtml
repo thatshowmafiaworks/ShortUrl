@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Url>
+﻿@using System.Security.Claims
+@model IEnumerable<Url>
 @{
     ViewData["Title"] = "Index";
 }
@@ -11,7 +12,7 @@
 {
     <table class="table table-striped">
         <tr>
-            <th>Basic url</th>
+            <th>Original url</th>
             <th>ShortenedUrl</th>
             <th>Actions</th>
         </tr>
@@ -30,7 +31,10 @@
                         <a href="@item.UrlShort" class="btn btn-primary" target="_blank">Go to this site</a>
                         <button class="btn btn-success" onclick="copy_to_clipboard('@item.UrlShort')">Copy</button>
                         <a asp-action="Info" asp-route-id="@item.Id" class="btn btn-info">Info</a>
-                        <button class="btn btn-danger">Delete</button>
+                        @if (User.IsInRole("Admin") || (User.FindFirstValue(ClaimTypes.NameIdentifier)==item.UserId))
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                        }
                     </div>
                 </td>
             </tr>

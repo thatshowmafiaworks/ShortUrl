@@ -1,0 +1,12 @@
+﻿@model AboutText
+@{
+}
+
+<h1>About</h1>
+@if (User.IsInRole("Admin"))
+{
+    <a class="btn btn-primary" asp-action="EditAbout">Edit</a>
+}
+<div class="container" style="margin-top:20px">
+    <p>@Model.Text</p>
+</div>
