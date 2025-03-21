@@ -28,9 +28,15 @@ namespace ShortUrl.Controllers
             {
                 return View(model);
             }
+            var hash = GenerateHash(model.UrlOriginal);
+            var existing = await urlRepo.GetByHash(hash);
+            if (existing != null)
+            {
+                TempData["errorMessage"] = "There is existing shortUrl for this url";
+                return View(model);
+            }
             try
             {
-                var hash = GenerateHash(model.UrlOriginal);
                 Url url = new()
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -51,6 +57,11 @@ namespace ShortUrl.Controllers
             }
         }
 
+        public async Task<IActionResult> Info(string id)
+        {
+            var url = await urlRepo.GetById(id);
+            return View(url);
+        }
 
         private string GenerateHash(string originalUrl)
         {

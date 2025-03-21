@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using ShortUrl.Models;
 
 namespace ShortUrl.Data
 {
@@ -25,6 +26,20 @@ namespace ShortUrl.Data
             {
                 await userManager.CreateAsync(admin, "Admin_123");
                 await userManager.AddToRoleAsync(admin, "Admin");
+            }
+
+            var context = services.GetRequiredService<ApplicationDbContext>();
+            if (context.About.Count() == 0)
+            {
+                AboutText text = new()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Text = "Seeded Text",
+                    CreatedBy = "",
+                    Created = DateTime.UtcNow
+                };
+                context.About.Add(text);
+                await context.SaveChangesAsync();
             }
         }
 

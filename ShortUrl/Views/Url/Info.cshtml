@@ -1,0 +1,45 @@
+﻿@model Url
+
+<a asp-action="Index" asp-controller="Url" class="btn btn-primary">Back</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Url Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">ID</th>
+            <td>@Model.Id</td>
+        </tr>
+        <tr>
+            <th scope="row">UserId</th>
+            <td>@Model.UserId</td>
+        </tr>
+        <tr>
+            <th scope="row">UrlOriginal</th>
+            <td>@Model.UrlOriginal</td>
+        </tr>
+        <tr>
+            <th scope="row">UrlNormalized</th>
+            <td>@Model.UrlNormalized</td>
+        </tr>
+        <tr>
+            <th scope="row">UrlShort</th>
+            <td>@Model.UrlShort</td>
+        </tr>
+        <tr>
+            <th scope="row">Hash</th>
+            <td>@Model.Hash</td>
+        </tr>
+        <tr>
+            <th scope="row">Created</th>
+            <td>@Model.Created</td>
+        </tr>
+        <tr>
+            <th scope="row">Updated</th>
+            <td>@Model.Updated</td>
+        </tr>
+    </tbody>
+</table>

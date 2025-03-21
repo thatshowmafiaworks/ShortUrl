@@ -12,4 +12,5 @@ public class ApplicationDbContext : IdentityDbContext
     }
 
     public DbSet<Url> Urls { get; set; }
+    public DbSet<AboutText> About { get; set; }
 }
