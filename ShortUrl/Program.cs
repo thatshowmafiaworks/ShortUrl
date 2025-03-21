@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using ShortUrl.Data;
+using ShortUrl.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,8 +24,16 @@ builder.Host.UseSerilog();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<IUrlRepository, UrlRepository>();
 
 var app = builder.Build();
+
+//Seed Data
+using (var scope = app.Services.CreateScope())
+{
+    await DbSeeder.SeedDefaultData(scope.ServiceProvider);
+}
+
 
 app.UseSerilogRequestLogging();
 
@@ -32,6 +41,7 @@ app.UseSerilogRequestLogging();
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+
 }
 else
 {
