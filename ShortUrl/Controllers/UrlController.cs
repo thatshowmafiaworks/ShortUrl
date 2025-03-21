@@ -63,7 +63,7 @@ namespace ShortUrl.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> Info(string id)
         {
             var url = await urlRepo.GetById(id);
