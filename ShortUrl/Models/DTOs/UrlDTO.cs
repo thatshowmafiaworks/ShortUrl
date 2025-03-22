@@ -7,5 +7,6 @@ namespace ShortUrl.Models.DTOs
         string Id { get; set; }
         [Required]
         public string UrlOriginal { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

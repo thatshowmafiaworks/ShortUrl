@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using ShortUrl.Data;
 using ShortUrl.Repositories;
+using ShortUrl.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IUrlRepository, UrlRepository>();
 builder.Services.AddTransient<IAboutTextRepository, AboutTextRepository>();
+builder.Services.AddTransient<IHashGenerator, HashGenerator>();
 
 var app = builder.Build();
 

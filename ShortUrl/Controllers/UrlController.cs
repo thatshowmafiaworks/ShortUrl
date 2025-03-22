@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using ShortUrl.Models;
 using ShortUrl.Models.DTOs;
 using ShortUrl.Repositories;
+using ShortUrl.Services;
 using System.Diagnostics;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace ShortUrl.Controllers
 {
@@ -14,7 +13,9 @@ namespace ShortUrl.Controllers
         IUrlRepository urlRepo,
         IAboutTextRepository aboutRepo,
         UserManager<IdentityUser> userManager,
-        ILogger<UrlController> logger) : Controller
+        ILogger<UrlController> logger,
+        IHashGenerator hashGenerator
+        ) : Controller
     {
         public async Task<IActionResult> Index()
         {
@@ -33,7 +34,7 @@ namespace ShortUrl.Controllers
             {
                 return View(model);
             }
-            var hash = GenerateHash(model.UrlOriginal);
+            var hash = hashGenerator.GenerateHash(model.UrlOriginal);
             var existing = await urlRepo.GetByHash(hash);
             if (existing != null)
             {
@@ -131,20 +132,6 @@ namespace ShortUrl.Controllers
                 return Redirect(url.UrlOriginal);
             }
             return Redirect("https://" + url.UrlOriginal);
-        }
-
-        private string GenerateHash(string originalUrl)
-        {
-            using (var sha256 = SHA256.Create())
-            {
-                byte[] hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(originalUrl));
-                var stringHash = Convert.ToBase64String(hash)
-                    .Replace("+", "")
-                    .Replace("=", "")
-                    .Replace("/", "")
-                    .Substring(0, 8);
-                return stringHash;
-            }
         }
     }
 }

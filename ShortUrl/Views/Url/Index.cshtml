@@ -1,18 +1,9 @@
 ﻿@model IEnumerable<Url>
 @{
-    var jsonModel = Json.Serialize(Model);
 }
-
-<script>
-    window.Model = @Html.Raw(jsonModel);
-    window.User = {
-        isAuthenticated : @Json.Serialize(User.Identity.IsAuthenticated),
-        isAdmin: @Json.Serialize(User.IsInRole("admin"))
-    }
-</script>
 
 <div id="root">
 
 </div>
 
-<script src="~/urlindex/build/static/js/main.b11631b1.js"></script>
+<script src="~/urlindex/build/static/js/main.6ccd2c8f.js"></script>
