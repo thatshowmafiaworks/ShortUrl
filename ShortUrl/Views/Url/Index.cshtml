@@ -1,9 +1,11 @@
 ﻿@model IEnumerable<Url>
 @{
+
 }
 
 <div id="root">
 
 </div>
 
-<script src="~/urlindex/build/static/js/main.6ccd2c8f.js"></script>
+@* <script src="~/urlindex/build/static/js/main.*.js"></script> *@
+<script src="@Url.Content("~/urlindex/build/static/js/"+TempData["reactFile"])"></script>

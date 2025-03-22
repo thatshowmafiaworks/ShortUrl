@@ -14,11 +14,15 @@ namespace ShortUrl.Controllers
         IAboutTextRepository aboutRepo,
         UserManager<IdentityUser> userManager,
         ILogger<UrlController> logger,
-        IHashGenerator hashGenerator
+        IHashGenerator hashGenerator,
+        IWebHostEnvironment env
         ) : Controller
     {
         public async Task<IActionResult> Index()
         {
+            string rootPath = Path.Combine(env.WebRootPath, "urlindex", "build", "static", "js");
+            string reactFile = Path.GetFileName(Directory.GetFiles(rootPath, "main.*").FirstOrDefault());
+            TempData["reactFile"] = reactFile;
             var urls = await urlRepo.GetAll();
             return View(urls);
         }

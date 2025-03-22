@@ -6,6 +6,8 @@ function App() {
   const [urls, SetUrls] = useState([]);
   const [user, SetUser] = useState({ id: "", isAuthenticated: false, isAdmin: false });
   const [newUrl, SetNewUrl] = useState("");
+  const [errorMessage, SetErrorMessage] = useState("");
+  const [successMessage, SetSuccessMessage] = useState("");
 
   useEffect(() => {
     getUserData();
@@ -15,19 +17,20 @@ function App() {
   const getUserData = async () => {
     await axios.get("api/auth", { withCredentials: true })
       .then(res => SetUser(res.data))
-      .catch(err => console.error(err));
+      .catch(err => SetErrorMessage(err));
     console.log(user);
   }
 
   const getUrls = async () => {
     await axios.get("api/allurls")
       .then(res => SetUrls(res.data))
-      .catch(err => console.error(err));
+      .catch(err => SetErrorMessage(err.response?.data?.error));
     console.log(urls);
   }
 
   const copyToClipBoard = (text) => {
     navigator.clipboard.writeText(text);
+    SetSuccessMessage("Copied!")
   }
 
   const deteleUrl = async (id) => {
@@ -35,7 +38,10 @@ function App() {
       headers: {
         "Content-Type": "application/json"
       }
-    });
+    }).catch(err => SetErrorMessage(err.response?.data?.error));
+    if (errorMessage === "") {
+      SetSuccessMessage("deleted successfully");
+    }
     getUrls();
   }
 
@@ -49,12 +55,28 @@ function App() {
       headers: {
         "Content-Type": "application/json"
       }
-    });
+    }).catch(err => SetErrorMessage(err.response?.data?.error));
+    if (errorMessage === "") {
+      SetSuccessMessage("created successfully");
+    }
     getUrls();
   }
 
   return (
     <div className="App">
+      {errorMessage != "" &&
+        <div className='alert alert-danger alert-dismissible fade show' role="alert">
+          {errorMessage}
+          <button type="button" className='btn-close' data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      }
+
+      {successMessage != "" &&
+        <div className='alert alert-success alert-dismissible fade show' role="alert">
+          {successMessage}
+          <button type="button" className='btn-close' data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>}
+
       {user != null && user.isAuthenticated &&
         <>
           <input
