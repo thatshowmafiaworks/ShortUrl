@@ -29,12 +29,16 @@ namespace ShortUrl.Data
             }
 
             var context = services.GetRequiredService<ApplicationDbContext>();
+            var about = """
+                This website generates a fixed-length hash (8 characters) from an original URL using SHA-256.
+                The goal is to create a unique and URL-friendly identifier for a given input URL, which can be used as a shortened link.
+                """;
             if (context.About.Count() == 0)
             {
                 AboutText text = new()
                 {
                     Id = Guid.NewGuid().ToString(),
-                    Text = "Seeded Text",
+                    Text = about,
                     CreatedBy = "",
                     Created = DateTime.UtcNow
                 };
