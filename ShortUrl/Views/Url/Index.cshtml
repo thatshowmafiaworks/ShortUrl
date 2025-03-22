@@ -1,58 +1,18 @@
-﻿@using System.Security.Claims
-@model IEnumerable<Url>
+﻿@model IEnumerable<Url>
 @{
-    ViewData["Title"] = "Index";
-}
-@if (User.Identity.IsAuthenticated)
-{
-    <a asp-action="Add" asp-controller="Url" class="btn btn-primary">Add new</a>
-
-}
-<h1>All Shortened Urls</h1>
-@if (Model.Count() > 0)
-{
-    <table class="table table-striped">
-        <tr>
-            <th>Original url</th>
-            <th>ShortenedUrl</th>
-            <th>Actions</th>
-        </tr>
-
-        @foreach(var item in Model)
-        {
-            <tr>
-                <td>
-                    @item.UrlOriginal
-                </td>
-                <td>
-                    @item.UrlShort
-                </td>
-                <td>
-                    <div class="btn-group" role="group">
-                        <a href="@item.UrlShort" class="btn btn-primary" target="_blank">Go to this site</a>
-                        <button class="btn btn-success" onclick="copy_to_clipboard('@item.UrlShort')">Copy</button>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <a asp-action="Info" asp-route-id="@item.Id" class="btn btn-info">Info</a>
-                        }
-                        @if (User.IsInRole("Admin") || (User.FindFirstValue(ClaimTypes.NameIdentifier)==item.UserId))
-                        {
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-                        }
-                    </div>
-                </td>
-            </tr>
-        }
-
-    </table>
-}
-else
-{
-    <h2>There is no urls</h2>
+    var jsonModel = Json.Serialize(Model);
 }
 
 <script>
-        function copy_to_clipboard(text){
-            navigator.clipboard.writeText(text);
-        }
+    window.Model = @Html.Raw(jsonModel);
+    window.User = {
+        isAuthenticated : @Json.Serialize(User.Identity.IsAuthenticated),
+        isAdmin: @Json.Serialize(User.IsInRole("admin"))
+    }
 </script>
+
+<div id="root">
+
+</div>
+
+<script src="~/urlindex/build/static/js/main.b11631b1.js"></script>
